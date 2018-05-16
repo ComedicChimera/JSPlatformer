@@ -1,0 +1,91 @@
+html, body {
+    background-color: #dddddd;
+    overflow-x: hidden;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0px 0px 1px #212121;
+    display: block;
+    height: 60px;
+    width: 100%;
+    position: relative;
+    padding: 5px;
+}
+
+header .title {
+    font-family: "Open Sans", sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+    position: relative;
+    top: 7px;
+    left: 20px;
+}
+
+header .title a {
+    color: #212121;
+    text-decoration: none;
+}
+
+header nav {
+    float: right;
+    position: relative;
+    right: 250px;
+    top: 12px;
+    font-size: 25px;
+    font-family: "Open Sans", sans-serif;
+}
+
+header nav a {
+    color: #212121;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 300;
+    transition-duration: 0.3s;
+}
+
+header nav a:hover {
+    color: #20c0ff;
+}
+
+footer {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0px 0px 1px #212121;
+    display: block;
+    height: 30px;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    padding: 5px;
+}
+
+footer span {
+    position: relative;
+    top: 3px;
+}
+
+.content {
+    background-color: white;
+    margin: 0 auto;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+    width: 60%;
+    position: relative;
+    top: 100px;
+    border-radius: 5px;
+    color: #212121;
+}
+
+.content h2 {
+    color: #20c0ff;
+    font-size: 25px;
+    margin: 2px;
+    font-weight: normal;
+}
