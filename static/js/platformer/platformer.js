@@ -1,61 +1,3 @@
-// renderer
-let canvas = document.getElementById('game-window');
-let ctx = canvas.getContext('2d');
-
-// renderer class
-class Renderer {
-    static floodScreen(color) {
-        // set color
-        ctx.fillStyle = color;
-
-        // fill screen
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-
-    static drawTime(time) {
-        // derive time values
-        let minutes = time.getMinutes(), seconds = time.getSeconds();
-
-        // handle leading zeros
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-
-        // draw to screen
-        ctx.fillText(`Time: ${minutes}:${seconds}`, canvas.width - 25, 25);
-    }
-
-    static drawMessage(msg, color) {
-        // configure font
-        ctx.font = '48px sans-serif';
-        ctx.fillStyle = color;
-        ctx.textAlign = 'center';
-
-        // draw text
-        ctx.fillText(msg, canvas.width / 2, canvas.height / 2);
-
-        // reset font configurations
-        ctx.font = '18px sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillStyle = 'white';
-    }
-
-    static drawEntity(entity) {
-        // handle animated entities
-        if (entity.animated) {
-            // get x coordinate
-            let minX = entity.sprite.animate();
-
-            // draw sprite selection
-            ctx.drawImage(entity.sprite.animationSheet, minX, 0, entity.sprite.sizeX, entity.sprite.sizeY, 
-                entity.x, canvas.height - (entity.y + entity.sprite.sizeY), entity.sprite.sizeX, entity.sprite.sizeY);
-        // non animates sprites
-        } else {
-            // draw sprite
-            ctx.drawImage(entity.sprite.image, entity.x, canvas.height - (entity.y + entity.sprite.sizeY));
-        }
-    }
-}
-
 // start up code
 Renderer.floodScreen('#b2b2b2');
 
@@ -65,6 +7,34 @@ Renderer.drawMessage('Press ENTER to Begin', 'black');
 // add enter event handler
 document.addEventListener('keydown', startGame);
 
+ // controls
+document.addEventListener('keydown', (ev) => {
+    switch (ev.which) {
+        case 65:
+            playerControls.left = true;
+            break;
+        case 68:
+            playerControls.right = true;
+            break;
+        case 32:
+            playerControls.jump = true; 
+            break;
+    }
+});
+document.addEventListener('keyup', (ev) => {
+    switch (ev.which) {
+        case 65:
+            playerControls.left = false;
+            break;
+        case 68:
+            playerControls.right = false;
+            break;
+        case 32:
+            playerControls.jump = false;
+            break;
+    }
+});
+
 // game init code
 // control object
 let playerControls = {
@@ -73,45 +43,22 @@ let playerControls = {
     jump: false
 }
 
+// platforms
+let entities;
 // player entity
-let player = new Player(0, 0, canvas.width);
+let player;
 
 // time codes
 let startTime;
 let stopTime;
 
+// speed of background
+let gameSpeed = 1.1;
+
 function startGame(ev) {
     if (ev.which == 13) {
-        // add event listeners
+        // remove start game listener
         document.removeEventListener('keydown', startGame);
-
-        // controls
-        document.addEventListener('keydown', (ev) => {
-            switch (ev.which) {
-                case 65:
-                    playerControls.left = true;
-                    break;
-                case 68:
-                    playerControls.right = true;
-                    break;
-                case 32:
-                    playerControls.jump = true; 
-                    break;
-            }
-        });
-        document.addEventListener('keyup', (ev) => {
-            switch (ev.which) {
-                case 65:
-                    playerControls.left = false;
-                    break;
-                case 68:
-                    playerControls.right = false;
-                    break;
-                case 32:
-                    playerControls.jump = false;
-                    break;
-            }
-        });
 
         // pause
         document.addEventListener('keydown', setPauseState);
@@ -119,6 +66,10 @@ function startGame(ev) {
         startTime = Date.now();
         // start the game
         window.requestAnimationFrame(loop);
+        // generate starting platforms
+        entities = getStartingPlatforms();
+        // setup player
+        player = new Player(entities[0].x + 50, entities[0].y + 60, canvas.width);
     }
 }
 
@@ -132,11 +83,22 @@ function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // update
     update();
+    // kill player
+    if (!player.alive) {
+        // send death message
+        Renderer.drawDeathMessage();
+        // remove event handlers
+        document.removeEventListener('keydown', setPauseState);
+        // add restart listener
+        window.addEventListener('keydown', startGame);
+    }
     // evaluate pause state
-    if (!paused) {
+    else if (!paused) {
         // next frame
         window.requestAnimationFrame(loop);
-    } else {
+    } 
+    // handle pause message
+    else {
         // clear screen with light grey
         Renderer.floodScreen("rgba(178, 178, 178, 0.5)");
         // write message to screen
@@ -163,10 +125,61 @@ function setPauseState(ev) {
 
 // update function
 function update() {
+    // draw background
+    Renderer.drawBackground();
+    // default yBase
+    player.yBase = 0;
+    // platform player stood on
+    let platform;
+    // draw entities and update yBase
+    for (var entity of entities) {
+        Renderer.drawEntity(entity);
+        if (entity.x - (player.sprite.sizeX - 10) < player.x && entity.x + entity.sprite.sizeX > player.x + 10 && player.y >= entity.y + player.acc) {
+            if (entity.y + entity.sprite.sizeY > player.yBase) { 
+                player.yBase = entity.y + entity.sprite.sizeY;
+                platform = entity;
+            }
+        }
+    }
     // update player
     player.update(playerControls);
     // draw player
     Renderer.drawEntity(player);
     // draw in the time
     Renderer.drawTime(new Date(Date.now() - startTime));
+    // get start x if platform
+    let startX = 0, startY = 0;
+    if (platform) {
+        startX = platform.x;
+        startY = platform.y;
+    }
+
+    // apply entity transforms
+    for (var i in entities) {
+        // allow elements to removed during iteration
+        if (i >= entities.length)
+            break;
+        if (entities[i] == platform)
+            platform = entities[i];
+        entities[i].x -= gameSpeed;
+        // remove entities that exit the screen
+        if (entities[i].x + entities[i].sprite.sizeX < 0) {
+            if (entities.length > 1) {
+                entities.splice(i, 1);
+            }   
+            else 
+                entities = [];
+        }
+    }
+
+    // apply entity movement to player standing moving platform
+    if (player.y == player.yBase && player.yBase != 0 && player.x > gameSpeed) {
+        player.x += platform.x - startX;
+        player.y += platform.y - startY;
+    }
+
+    // add on next platform if necessary
+    let nPlatform = generateNext(gameSpeed, Date.now() - startTime);
+    
+    if (nPlatform) entities.push(nPlatform);
 }

@@ -1,6 +1,7 @@
 // revise for release
 const ASSET_PATH = '../../static/images/assets/platformer/';
 
+// normal sprite
 class Sprite {
     constructor(name, sizeX, sizeY) {
         this.image = new Image(sizeX, sizeY);
@@ -10,6 +11,7 @@ class Sprite {
     }
 }
 
+// sprite with animations
 class AnimatedSprite {
     constructor(name, sizeX, sizeY, frames) {
         this.name = name; // for controls and animation management
@@ -32,5 +34,15 @@ class AnimatedSprite {
             this.animationCounter += 0.25;
         // return minimum value
         return minX;
+    }
+}
+
+// sprite that used tileset
+class TileSprite {
+    constructor(startX, startY, sizeX, sizeY) {
+        this.startX = startX * 16;
+        this.startY = startY * 16;
+        this.sizeX = sizeX * 16;
+        this.sizeY = sizeY * 16;
     }
 }
