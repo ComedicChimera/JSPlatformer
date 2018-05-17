@@ -124,6 +124,11 @@ class Renderer {
         // reset scale
         ctx.scale(10/23, 10/23);
     }
+
+    static drawWater() {
+        ctx.fillStyle = 'rgba(24, 73, 102, 0.5)';
+        ctx.fillRect(0, canvas.height - 30, 848, 30);
+    }
 }
 
 Renderer.backgroundOffset = 1;

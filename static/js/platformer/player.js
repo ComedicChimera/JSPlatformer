@@ -45,7 +45,7 @@ class Player extends Entity {
             this.acc = -this.gravity;
 
         // handle death
-        this.alive = this.y >= 45;
+        this.alive = this.y >= 10;
     }
 
     animate(controls) {

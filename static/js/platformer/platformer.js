@@ -53,7 +53,7 @@ let startTime;
 let stopTime;
 
 // speed of background
-let gameSpeed = 1.1;
+let gameSpeed;
 
 function startGame(ev) {
     if (ev.which == 13) {
@@ -69,7 +69,9 @@ function startGame(ev) {
         // generate starting platforms
         entities = getStartingPlatforms();
         // setup player
-        player = new Player(entities[0].x + 50, entities[0].y + 60, canvas.width);
+        player = new Player(entities[2].x, entities[2].y + 20, canvas.width);
+        // reset game speed
+        gameSpeed = 1.1
     }
 }
 
@@ -127,6 +129,8 @@ function setPauseState(ev) {
 function update() {
     // draw background
     Renderer.drawBackground();
+    // draw water
+    Renderer.drawWater();
     // default yBase
     player.yBase = 0;
     // platform player stood on
