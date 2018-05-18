@@ -89,3 +89,13 @@ footer span {
     margin: 2px;
     font-weight: normal;
 }
+
+.content a {
+    font-style: bold;
+    text-decoration: none;
+    color: #212121;
+}
+
+.content a:hover {
+    color: #20c0ff;
+}

@@ -10,22 +10,29 @@ document.addEventListener('keydown', startGame);
  // controls
 document.addEventListener('keydown', (ev) => {
     switch (ev.which) {
+        case 37:
         case 65:
+            ev.preventDefault();
             playerControls.left = true;
             break;
+        case 39:
         case 68:
+            ev.preventDefault();
             playerControls.right = true;
             break;
         case 32:
+            ev.preventDefault();    
             playerControls.jump = true; 
             break;
     }
 });
 document.addEventListener('keyup', (ev) => {
     switch (ev.which) {
+        case 37:
         case 65:
             playerControls.left = false;
             break;
+        case 39:
         case 68:
             playerControls.right = false;
             break;
@@ -92,7 +99,7 @@ function loop() {
         // remove event handlers
         document.removeEventListener('keydown', setPauseState);
         // add restart listener
-        window.addEventListener('keydown', startGame);
+        document.addEventListener('keydown', startGame);
     }
     // evaluate pause state
     else if (!paused) {
@@ -129,8 +136,6 @@ function setPauseState(ev) {
 function update() {
     // draw background
     Renderer.drawBackground();
-    // draw water
-    Renderer.drawWater();
     // default yBase
     player.yBase = 0;
     // platform player stood on
@@ -160,6 +165,7 @@ function update() {
 
     // apply entity transforms
     for (var i in entities) {
+        entities[i].update(entities[i] == platform && player.y == player.yBase);
         // allow elements to removed during iteration
         if (i >= entities.length)
             break;
@@ -186,4 +192,11 @@ function update() {
     let nPlatform = generateNext(gameSpeed, Date.now() - startTime);
     
     if (nPlatform) entities.push(nPlatform);
+
+    // draw water
+    Renderer.drawWater();
+
+    // increase game speed
+    if (gameSpeed < 6.4)
+        gameSpeed *= 1.0002;
 }
