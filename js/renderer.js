@@ -69,7 +69,7 @@ class Renderer {
         else if (entity.tiled) {
             // get the sprite sheet
             let image = new Image(624, 304);
-            image.src = '../static/images/assets/platformer/tileset.png';
+            image.src = 'assets/tileset.png';
 
             // draw sprite region
             ctx.drawImage(image, entity.sprite.startX, entity.sprite.startY, entity.sprite.sizeX, entity.sprite.sizeY, 
@@ -84,7 +84,7 @@ class Renderer {
 
     // display background
     static drawBackground() {
-        let bgPath = '../static/images/assets/platformer/background/plx';
+        let bgPath = 'assets/background/plx';
         // draw in the background fill
         this.floodScreen('#aedecb');
         // setup scale

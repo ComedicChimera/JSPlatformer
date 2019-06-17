@@ -1,5 +1,5 @@
 // revise for release
-const ASSET_PATH = '../static/images/assets/platformer/';
+const ASSET_PATH = 'assets/';
 
 // normal sprite
 class Sprite {

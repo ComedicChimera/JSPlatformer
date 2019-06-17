@@ -3,7 +3,7 @@ class Player extends Entity {
         super(x, y, new AnimatedSprite('character/idle-right.png', 38, 68, 12), 8, true);
         this.acc = 0;
         this.gravityAccumulator = 0;
-        this.gravity = 0.15;
+        this.gravity = 0.05;
         this.maxX = maxX - this.sprite.sizeX;
         this.orientation = false;
         this.yBase = 0;
@@ -20,7 +20,7 @@ class Player extends Entity {
 
         // handle jumping
         if (controls.jump && this.acc == 0)
-            this.acc += 20;
+            this.acc += 15;
 
         // handle jump stop
         if (this.acc == 0)

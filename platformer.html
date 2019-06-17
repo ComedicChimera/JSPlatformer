@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>JSPlatformer</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+        <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+        
+    </head>
+    <body>
+        <div class="content">
+            <div class="game">
+                <div class='game-container'>
+                    <canvas id='game-window' width='848px' height='480px'>
+            
+                    </canvas>
+                </div>
+                
+                <style>
+                    #game-window {
+                        background-color: black;
+                        position: relative;
+                        left: 50%;
+                        transform: translate(-50%);
+                        border-radius: 5px;
+                    }
+                </style>
+                <script src='js/sprite.js'></script>
+                <script src='js/entity.js'></script>
+                <script src='js/player.js'></script>
+                <script src='js/renderer.js'></script>
+                <script src='js/generator.js'></script>
+                <script src='js/platformer.js'></script>
+            </div>
+            <div class="controls">
+              <span class="control"><span class="control-button">A</span> / <span class="control-button">←</span> Left</span>&emsp;
+              <span class="control"><span class="control-button">D</span> / <span class="control-button">→</span> Right</span>&emsp;
+              <span class="control"><span class="control-button">Space</span> Jump</span>
+            </div>
+            <p><b>Platformer</b> is a fast-paced game where you attempt to stay alive for
+            as long as possible.  You platform through a procedurally generated level that gets
+            more complicated as you go.  You can only touch platforms, everything else will kill you.</p>
+            
+            <i>All graphical assets used for this game are from the free <b><a href='https://jesse-m.itch.io/jungle-pack'>Jungle Asset Pack</a></b>
+                found on <a href='https://www.itch.io'>Itch.io</a>.</i>
+        </div>
+    </body>
+</html>
+
